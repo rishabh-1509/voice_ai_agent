@@ -48,13 +48,4 @@ This repository contains a Python-based AI agent designed for real-time voice in
 - **Thread Offloading:**  
   Wraps synchronous API calls (like Google Calendar operations) in `asyncio.to_thread` to avoid blocking the main event loop.
 
-## Overview
-
-The repository is organized into modular components:
-- **TranscriptionBuffer:** Manages live transcription data and tracks timing for detecting conversation pauses.
-- **RAGSystem:** Sets up the vector database and LLM pipeline to support retrieval-augmented response generation.
-- **IntentDetector:** Analyzes user input to detect specific intents using regex patterns.
-- **FunctionExecutor:** Maps detected intents to corresponding functions, executes API calls, and manages user data interactions.
-- **Main Loop:** Integrates all components within an asynchronous loop to handle real-time transcription, interruption management, and voice output.
-
 This project demonstrates a scalable, multi-functional conversational AI agent capable of dynamically integrating various external APIs and knowledge sources. It's designed to be extended and adapted for diverse real-world applications.
