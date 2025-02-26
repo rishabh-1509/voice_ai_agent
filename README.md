@@ -48,27 +48,6 @@ This repository contains a Python-based AI agent designed for real-time voice in
 - **Thread Offloading:**  
   Wraps synchronous API calls (like Google Calendar operations) in `asyncio.to_thread` to avoid blocking the main event loop.
 
-##File structure 
-ai-assistant/
-├── main.py
-├── config.py
-├── requirements.txt
-├── agents/
-│   ├── __init__.py
-│   └── conversation_agent.py
-├── services/
-│   ├── __init__.py
-│   ├── video_sdk.py
-│   ├── rag_engine.py
-│   ├── intent_detector.py
-│   └── audio_processor.py
-├── integrations/
-│   ├── __init__.py
-│   ├── calendar.py
-│   └── crm.py
-└── utilities/
-    ├── __init__.py
-    ├── logger.py
-    └── context_manager.py
+
 
 This project demonstrates a scalable, multi-functional conversational AI agent capable of dynamically integrating various external APIs and knowledge sources. It's designed to be extended and adapted for diverse real-world applications.
