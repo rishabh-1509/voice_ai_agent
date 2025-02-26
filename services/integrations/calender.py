@@ -1,37 +1,27 @@
-from googleapiclient.discovery import build
-from config import settings
-import datetime
-import asyncio
+from google.oauth2.credentials import Credentials
+from google.auth.transport.requests import Request
+from google_auth_oauthlib.flow import InstalledAppFlow
 
 class CalendarIntegration:
-    def __init__(self):
-        self.service = build('calendar', 'v3', developerKey=settings.calendar_api_key)
-        
-    async def create_event(self, event_details):
-        try:
-            event = {
-                'summary': event_details['summary'],
-                'start': {'dateTime': event_details['start_time']},
-                'end': {'dateTime': event_details['end_time']},
-            }
-            return await asyncio.to_thread(
-                lambda: self.service.events().insert(
-                    calendarId='primary',
-                    body=event
-                ).execute()
-            )
-        except Exception as e:
-            print(f"Calendar error: {e}")
-            return None
+    SCOPES = ['https://www.googleapis.com/auth/calendar']
+    
+    def __init__(self, token_path='token.json', creds_path='credentials.json'):
+        self.creds = self._authenticate(token_path, creds_path)
+        self.service = build('calendar', 'v3', credentials=self.creds)
+
+    def _authenticate(self, token_path, creds_path):
+        creds = None
+        if os.path.exists(token_path):
+            creds = Credentials.from_authorized_user_file(token_path, self.SCOPES)
             
-    async def delete_event(self, event_id):
-        try:
-            return await asyncio.to_thread(
-                lambda: self.service.events().delete(
-                    calendarId='primary',
-                    eventId=event_id
-                ).execute()
-            )
-        except Exception as e:
-            print(f"Calendar deletion error: {e}")
-            return False
+        if not creds or not creds.valid:
+            if creds and creds.expired and creds.refresh_token:
+                creds.refresh(Request())
+            else:
+                flow = InstalledAppFlow.from_client_secrets_file(creds_path, self.SCOPES)
+                creds = flow.run_local_server(port=0)
+                
+            with open(token_path, 'w') as token:
+                token.write(creds.to_json())
+                
+        return creds
